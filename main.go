@@ -2,8 +2,9 @@ package main
 
 import (
 	"log"
-	"math"
+	"math/rand"
 	"os"
+	"time"
 
 	t "github.com/nsf/termbox-go"
 )
@@ -16,29 +17,52 @@ func main() {
 		os.Exit(1)
 	}
 
-	w, h := t.Size()
+	rand.Seed(time.Now().Unix())
 
-	cellSize := int(math.Min(float64(h), float64(w))-2) / 4
+	cellSize := 4
 
-	printField(cellSize)
+	x, y := rand.Intn(4), rand.Intn(4)
+	val := rand.Intn(2) + 1
+
+	field[x][y] = val
+
+	drawField(field, cellSize)
 	t.Flush()
 }
 
-func printField(cellSize int) {
+func drawField(field [4][4]int, cellSize int) {
 	for i := 0; i < 4; i++ {
 		for j := 0; j < 4; j++ {
-			printSquare(cellSize*i, cellSize*j, 5, 5)
+			drawCell(i, j, determineColor(field[i][j]), cellSize)
 		}
 	}
 }
 
-func printSquare(x, y, w, h int) {
-	for i := x; i < x+w; i++ {
-		t.SetCell(i, y, '+', t.ColorBlack, t.ColorWhite)
-		t.SetCell(i, y+h, '+', t.ColorBlack, t.ColorWhite)
+func determineColor(x int) t.Attribute {
+	switch x {
+	case 0:
+		return t.ColorWhite
+	case 1:
+		return t.ColorYellow
+	case 2:
+		return t.ColorCyan
+	case 3:
+		return t.ColorBlue
+	case 4:
+		return t.ColorGreen
+	case 5:
+		return t.ColorRed
+	case 6:
+		return t.ColorRed
+	default:
+		return t.ColorBlack
 	}
-	for j := y; j < y+h; j++ {
-		t.SetCell(x, j, '+', t.ColorBlack, t.ColorWhite)
-		t.SetCell(x+w, j, '+', t.ColorBlack, t.ColorWhite)
+}
+
+func drawCell(x, y int, color t.Attribute, cellSize int) {
+	for i := 0; i < cellSize; i++ {
+		for j := 0; j < cellSize; j++ {
+			t.SetCell((x*cellSize)+i, (y*cellSize)+j, ' ', t.ColorDefault, color)
+		}
 	}
 }
