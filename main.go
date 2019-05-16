@@ -4,6 +4,7 @@ import (
 	"log"
 	"math/rand"
 	"os"
+	"strconv"
 	"time"
 
 	t "github.com/nsf/termbox-go"
@@ -178,8 +179,6 @@ func determineColor(x int) t.Attribute {
 		return t.ColorGreen
 	case 5:
 		return t.ColorRed
-	case 6:
-		return t.ColorRed
 	default:
 		return t.ColorBlack
 	}
@@ -190,5 +189,14 @@ func drawCell(x, y int, color t.Attribute, cellSize int) {
 		for j := 0; j < cellSize; j++ {
 			t.SetCell((x*cellSize)+i, (y*cellSize)+j, ' ', t.ColorDefault, color)
 		}
+	}
+	printText(x, y, cellSize)
+}
+
+func printText(x, y int, cellSize int) {
+	s := strconv.Itoa((2 << (uint(field[x][y] - 1))))
+
+	for i, c := range s {
+		t.SetCell((x*cellSize)+i, y*cellSize, c, t.ColorBlack, t.ColorWhite)
 	}
 }
