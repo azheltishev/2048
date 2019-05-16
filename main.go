@@ -54,6 +54,21 @@ func main() {
 }
 
 func randomlySpawn(field [4][4]int) [4][4]int {
+	freePlaceAvailable := false
+
+out:
+	for i := 0; i < 4; i++ {
+		for j := 0; j < 4; j++ {
+			if field[i][j] == 0 {
+				freePlaceAvailable = true
+				break out
+			}
+		}
+	}
+
+	if !freePlaceAvailable {
+		return field
+	}
 	x, y := rand.Intn(4), rand.Intn(4)
 
 	for field[x][y] != 0 {
