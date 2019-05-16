@@ -39,7 +39,7 @@ func main() {
 
 			switch e.Key {
 			case t.KeyArrowUp:
-
+				field = shiftRowsUp(field)
 			case t.KeyArrowDown:
 				field = shiftRowsDown(field)
 			case t.KeyArrowLeft:
@@ -82,20 +82,34 @@ out:
 func shiftRowsDown(field [4][4]int) [4][4]int {
 	for times := 0; times < 4; times++ {
 		for y := 3; y > 0; y-- {
-			for x := 0; x < 4; x++ {
-				if field[x][y-1] != 0 {
-					if field[x][y-1] == field[x][y] {
-						field[x][y] = -(field[x][y] + 1)
-						field[x][y-1] = 0
-					} else if field[x][y] == 0 {
-						field[x][y] = field[x][y-1]
-						field[x][y-1] = 0
-					}
-				}
-			}
+			field = shiftRow(y, -1, field)
 		}
 	}
 	return mod(field)
+}
+
+func shiftRowsUp(field [4][4]int) [4][4]int {
+	for times := 0; times < 4; times++ {
+		for y := 0; y < 3; y++ {
+			field = shiftRow(y, 1, field)
+		}
+	}
+	return mod(field)
+}
+
+func shiftRow(y int, delta int, field [4][4]int) [4][4]int {
+	for x := 0; x < 4; x++ {
+		if field[x][y+delta] != 0 {
+			if field[x][y+delta] == field[x][y] {
+				field[x][y] = -(field[x][y] + 1)
+				field[x][y+delta] = 0
+			} else if field[x][y] == 0 {
+				field[x][y] = field[x][y+delta]
+				field[x][y+delta] = 0
+			}
+		}
+	}
+	return field
 }
 
 func mod(field [4][4]int) [4][4]int {
