@@ -83,15 +83,13 @@ func shiftRowsDown(field [4][4]int) [4][4]int {
 	for times := 0; times < 4; times++ {
 		for y := 3; y > 0; y-- {
 			for x := 0; x < 4; x++ {
-				if field[x][y] == 0 {
-					if field[x][y-1] != 0 {
-						if field[x][y-1] == field[x][y] {
-							field[x][y] = -(field[x][y] + 1)
-							field[x][y-1] = 0
-						} else {
-							field[x][y] = field[x][y-1]
-							field[x][y-1] = 0
-						}
+				if field[x][y-1] != 0 {
+					if field[x][y-1] == field[x][y] {
+						field[x][y] = -(field[x][y] + 1)
+						field[x][y-1] = 0
+					} else if field[x][y] == 0 {
+						field[x][y] = field[x][y-1]
+						field[x][y-1] = 0
 					}
 				}
 			}
