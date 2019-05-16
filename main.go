@@ -43,9 +43,9 @@ func main() {
 			case t.KeyArrowDown:
 				field = shiftRowsDown(field)
 			case t.KeyArrowLeft:
-
+				field = shiftColsLeft(field)
 			case t.KeyArrowRight:
-
+				field = shiftColsRight(field)
 			}
 		}
 	}
@@ -123,10 +123,36 @@ func mod(field [4][4]int) [4][4]int {
 	return field
 }
 
-func shiftCols(yd int, field [4][4]int) [4][4]int {
-	// for row := 0; row < 4; row++ {
+func shiftColsRight(field [4][4]int) [4][4]int {
+	for times := 0; times < 4; times++ {
+		for x := 3; x > 0; x-- {
+			field = shiftCols(x, -1, field)
+		}
+	}
+	return mod(field)
+}
 
-	// }
+func shiftColsLeft(field [4][4]int) [4][4]int {
+	for times := 0; times < 4; times++ {
+		for x := 0; x < 3; x++ {
+			field = shiftCols(x, 1, field)
+		}
+	}
+	return mod(field)
+}
+
+func shiftCols(x int, delta int, field [4][4]int) [4][4]int {
+	for y := 0; y < 4; y++ {
+		if field[x+delta][y] != 0 {
+			if field[x+delta][y] == field[x][y] {
+				field[x][y] = -(field[x][y] + 1)
+				field[x+delta][y] = 0
+			} else if field[x][y] == 0 {
+				field[x][y] = field[x+delta][y]
+				field[x+delta][y] = 0
+			}
+		}
+	}
 	return field
 }
 
