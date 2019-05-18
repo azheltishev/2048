@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"math"
 	"os"
 	"strconv"
 
@@ -61,9 +63,24 @@ func main() {
 func drawField(tiles [][]uint64, fieldSize int, cellSize int) {
 	for i := 0; i < fieldSize; i++ {
 		for j := 0; j < fieldSize; j++ {
-			drawCell(i, j, determineColor(tiles[i][j]), (wWidth/2)-(fieldSize*cellSize/2), (wHeight/2)-(fieldSize*cellSize/2), cellSize, strconv.Itoa(int(tiles[i][j])))
+			drawCell(i, j, determineColor(tiles[i][j]), (wWidth/2)-(fieldSize*cellSize/2), (wHeight/2)-(fieldSize*cellSize/2), cellSize, normalize(tiles[i][j], cellSize))
 		}
 	}
+}
+
+func normalize(x uint64, maxWidth int) string {
+
+	if x == 0 {
+		return ""
+	}
+
+	s := strconv.FormatUint(x, 10)
+
+	if len(s) <= maxWidth {
+		return s
+	}
+
+	return fmt.Sprintf("2^%.0f", math.Log2(float64(x)))
 }
 
 func determineColor(x uint64) t.Attribute {
