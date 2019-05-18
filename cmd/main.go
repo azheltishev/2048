@@ -9,6 +9,8 @@ import (
 	t "github.com/nsf/termbox-go"
 )
 
+var wWidth, wHeight int
+
 func main() {
 	if err := t.Init(); err != nil {
 		log.Println(err)
@@ -18,7 +20,9 @@ func main() {
 	var field _2048.Field
 
 	cellSize := 4
-	fieldSize := 8
+	fieldSize := 4
+
+	wWidth, wHeight = t.Size()
 
 	field.Init(fieldSize, fieldSize)
 
@@ -57,7 +61,7 @@ func main() {
 func drawField(tiles [][]uint64, fieldSize int, cellSize int) {
 	for i := 0; i < fieldSize; i++ {
 		for j := 0; j < fieldSize; j++ {
-			drawCell(i, j, determineColor(tiles[i][j]), cellSize, strconv.Itoa(int(tiles[i][j])))
+			drawCell(i, j, determineColor(tiles[i][j]), (wWidth/2)-(fieldSize*cellSize/2), (wHeight/2)-(fieldSize*cellSize/2), cellSize, strconv.Itoa(int(tiles[i][j])))
 		}
 	}
 }
@@ -81,18 +85,18 @@ func determineColor(x uint64) t.Attribute {
 	}
 }
 
-func drawCell(x, y int, color t.Attribute, cellSize int, s string) {
+func drawCell(x, y int, color t.Attribute, offsetX, offsetY int, cellSize int, s string) {
 	for i := 0; i < cellSize; i++ {
 		for j := 0; j < cellSize; j++ {
-			t.SetCell((x*cellSize)+i, (y*cellSize)+j, ' ', t.ColorDefault, color)
+			t.SetCell(offsetX+((x*cellSize)+i), offsetY+(y*cellSize)+j, ' ', t.ColorDefault, color)
 		}
 	}
-	printText(x, y, cellSize, s)
+	printText(x, y, cellSize, offsetX, offsetY, s)
 }
 
-func printText(x, y int, cellSize int, s string) {
+func printText(x, y int, cellSize int, offsetX, offsetY int, s string) {
 
 	for i, c := range s {
-		t.SetCell((x*cellSize)+i, y*cellSize, c, t.ColorBlack, t.ColorWhite)
+		t.SetCell(offsetX+(x*cellSize)+i, offsetY+y*cellSize, c, t.ColorBlack, t.ColorWhite)
 	}
 }
