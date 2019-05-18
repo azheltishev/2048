@@ -2,16 +2,12 @@ package main
 
 import (
 	"log"
-	"strconv"
-
-	// "math/rand"
 	"os"
+	"strconv"
 
 	"github.com/azheltishev/_2048"
 	t "github.com/nsf/termbox-go"
 )
-
-// var field [4][4]int
 
 func main() {
 	if err := t.Init(); err != nil {
@@ -22,7 +18,9 @@ func main() {
 	var field _2048.Field
 
 	cellSize := 4
-	field.Init(cellSize, cellSize)
+	fieldSize := 8
+
+	field.Init(fieldSize, fieldSize)
 
 	for {
 		if err := field.SpawnTile(); err != nil {
@@ -30,7 +28,7 @@ func main() {
 			break
 		}
 
-		drawField(field.Tiles, cellSize)
+		drawField(field.Tiles, fieldSize, cellSize)
 		t.Flush()
 
 		e := t.PollEvent()
@@ -56,9 +54,9 @@ func main() {
 	log.Println("game over")
 }
 
-func drawField(tiles [][]uint64, cellSize int) {
-	for i := 0; i < 4; i++ {
-		for j := 0; j < 4; j++ {
+func drawField(tiles [][]uint64, fieldSize int, cellSize int) {
+	for i := 0; i < fieldSize; i++ {
+		for j := 0; j < fieldSize; j++ {
 			drawCell(i, j, determineColor(tiles[i][j]), cellSize, strconv.Itoa(int(tiles[i][j])))
 		}
 	}
