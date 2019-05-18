@@ -70,15 +70,15 @@ func determineColor(x uint64) t.Attribute {
 	switch x {
 	case 0:
 		return t.ColorWhite
-	case 1:
-		return t.ColorYellow
 	case 2:
-		return t.ColorCyan
-	case 3:
-		return t.ColorBlue
+		return t.ColorYellow
 	case 4:
+		return t.ColorCyan
+	case 8:
+		return t.ColorBlue
+	case 16:
 		return t.ColorGreen
-	case 5:
+	case 32:
 		return t.ColorRed
 	default:
 		return t.ColorBlack
